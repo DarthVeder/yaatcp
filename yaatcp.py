@@ -17,8 +17,8 @@ try:
 
     while True:
         #Ok, it works
-        #text = 'Ciao cazzone...\n1 - Contact ground'
-        #data = [(13184,len(text)), (13050,'h')]
+        #text = '1 - Request Clearance\n'
+        #data = [(int('3380',16),len(text)), (int('32FA',16),'h')]
         #fdata = fsuipc.prepare_data(data, False)
         #fsuipc.write(fdata, [text, 100])
 
