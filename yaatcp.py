@@ -1,15 +1,41 @@
 import pyuipc as fsuipc
+import time
 
-fsuipc.open(fsuipc.SIM_FSX)
+DWORD, WORD = (4,2)
+call_frequency = 1
 
-#text = 'Ciao cazzone...\n1 - Contact ground'
-#data = [(13184,len(text)), (13050,'h')]
-#fdata = fsuipc.prepare_data(data, False)
-#fsuipc.write(fdata, [text, 100])
+def hotkey(data):
+    """
+    Read any hotkey trapped
+    """
+    byte=[data[0][i:(i+DWORD)] for i in range(0,len(data[0]),DWORD)]
 
-data = [(12816,224)]
-rdata = fsuipc.prepare_data(data)
-val = fsuipc.read(rdata)
-bda=[val[0][i:(i+4)] for i in range(0,len(val[0]),4)]
 
-fsuipc.close()
+starttime = time.time()
+try:
+    #fsuipc.open(fsuipc.SIM_FSX)
+
+    while True:
+        #Ok, it works
+        #text = 'Ciao cazzone...\n1 - Contact ground'
+        #data = [(13184,len(text)), (13050,'h')]
+        #fdata = fsuipc.prepare_data(data, False)
+        #fsuipc.write(fdata, [text, 100])
+
+        #data = [(int('0x3210',16),224)]
+        #rdata = fsuipc.prepare_data(data)
+        #call = fsuipc.read(rdata)
+        #hotkey(call)
+
+        print time.time() - starttime
+    
+        time.sleep(1.0/call_frequency - time.time()%(1/call_frequency))
+
+    # Ok, Closing connection
+    fsuipc.close()
+    
+except fsuipc.FSUIPCException as e:  
+    print e.errorString
+    exit(1)
+
+
