@@ -1,6 +1,6 @@
 import pyuipc as fsuipc
 import time
-import binascii
+import struct
 from maps.fsx import *
 
 DWORD, WORD = (4,2) # common bytes variables
@@ -11,17 +11,17 @@ def requestAicraftData():
     Returns a tuple with aircraft latitude, longitude, FL, Altitude AMSL,
     true heading and mag dev at aircraft position
     """
-    data = [ (int('6010',16),8) ] #,\
-##             (ACFT_LONG,byte[ACFT_LONG]),
-##             (ACFT_ALT,byte[ACFT_ALT]),
-##             (ACFT_HDG_T,byte[ACFT_HDG_T]),
-##             (ACFT_MAG_VAR,byte[ACFT_MAG_VAR]),
-##             (ACFT_FL,byte[ACFT_FL]) ]
+    data = [ (ACFT_LAT,byte[ACFT_LAT]),\
+             (ACFT_LONG,byte[ACFT_LONG]),
+             (ACFT_ALT,byte[ACFT_ALT]),
+             (ACFT_HDG_T,byte[ACFT_HDG_T]),
+             (ACFT_MAG_VAR,byte[ACFT_MAG_VAR]),
+             (ACFT_FL,byte[ACFT_FL]) ]
 
     pdata = fsuipc.prepare_data(data)
     acft_data = fsuipc.read(pdata)
 
-    return acft_data
+    return [struct.unpack('d',acft_data[i])[0] for i in range(len(acft_data)) ]
 
 def requestMETAR(ICAOid):
     """
