@@ -6,6 +6,23 @@ from maps.fsx import *
 DWORD, WORD = (4,2) # common bytes variables
 call_frequency = 1
 
+def requestAicraftData():
+    """
+    Returns a tuple with aircraft latitude, longitude, FL, Altitude AMSL,
+    true heading and mag dev at aircraft position
+    """
+    data = [ (int('6010',16),8) ] #,\
+##             (ACFT_LONG,byte[ACFT_LONG]),
+##             (ACFT_ALT,byte[ACFT_ALT]),
+##             (ACFT_HDG_T,byte[ACFT_HDG_T]),
+##             (ACFT_MAG_VAR,byte[ACFT_MAG_VAR]),
+##             (ACFT_FL,byte[ACFT_FL]) ]
+
+    pdata = fsuipc.prepare_data(data)
+    acft_data = fsuipc.read(pdata)
+
+    return acft_data
+
 def requestMETAR(ICAOid):
     """
     Returns a METAR string given the 4 code ICAO. The METAR is
@@ -44,7 +61,7 @@ try:
     fsuipc.open(fsuipc.SIM_FSX)
 
     while flight_in_progress:
-        #Ok, it works
+        # MENU ON - wip
         #text = '1 - Request Clearance\n'
         #data = [(int('3380',16),len(text)), (int('32FA',16),'h')]
         #fdata = fsuipc.prepare_data(data, False)
@@ -54,9 +71,15 @@ try:
         #rdata = fsuipc.prepare_data(data)
         #call = fsuipc.read(rdata)
         #hotkey(call)
+        # MENU OFF
 
-        metar = requestMETAR('EDDF')
-        print(metar)
+        # WEATHER START
+##        metar = requestMETAR('EDDF')
+##        print(metar)
+        #  WEATHER END
+
+        acft_data = requestAicraftData()
+        print(acft_data)
         
         print time.time() - starttime
     
